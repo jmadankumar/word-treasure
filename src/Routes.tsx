@@ -3,7 +3,6 @@ import { Switch, Route, RouteProps } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-
 export interface CustomRouteProps extends RouteProps {
   isPrivate?: boolean;
   key: string;

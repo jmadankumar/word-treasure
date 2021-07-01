@@ -15,7 +15,6 @@ const StyledLayout = styled.div`
   .content {
     width: 100%;
     height: 100%;
-    padding: 1rem;
     overflow: hidden;
     overflow-y: auto;
   }
@@ -32,7 +31,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
   return (
     <StyledLayout id="page-container" className={className}>
       <Header />
-      <main className="main">
+      <main className="main p-5 pt-2 md:p-8">
         <div className="content">{children}</div>
       </main>
     </StyledLayout>
