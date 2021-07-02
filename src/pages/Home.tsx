@@ -103,6 +103,7 @@ const Home: React.FunctionComponent = () => {
 
   useEffect(() => {
     fetchWords();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterOptions]);
 
   const handleSave = () => {
