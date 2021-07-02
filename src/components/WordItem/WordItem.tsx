@@ -28,8 +28,10 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
   return (
     <>
       <ListItem divider={!open} key={word.id}>
-        <ListItemIcon onClick={() => setOpen(!open)}>
-          <Avatar>{word.text}</Avatar>
+        <ListItemIcon onClick={() => setOpen((_open) => !_open)}>
+          <Avatar src={word.image_url} className="capitalize">
+            {word.text[0]}
+          </Avatar>
         </ListItemIcon>
         <ListItemText
           primary={word.text}

@@ -6,17 +6,11 @@ import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import { WordFilterOptions } from "../../types";
+import { WordFilterFormData } from "../../types";
 import { Drawer, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import styled from "styled-components";
 import useWordCategories from "../../hooks/useWordCategories";
-
-export interface WordFilterDrawerProps {
-  open: boolean;
-  onClose?: () => void;
-  onSearch?: () => void;
-}
 
 const StyledWordFilterDrawer = styled(Drawer)`
   .paper {
@@ -27,16 +21,41 @@ const StyledWordFilterDrawer = styled(Drawer)`
     max-width: 600px;
   }
 `;
+
+export interface WordFilterDrawerProps {
+  open: boolean;
+  onClose?: () => void;
+  onSearch?: (options: WordFilterFormData) => void;
+  value: WordFilterFormData;
+}
+
 const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
   open,
+  value,
+  onSearch,
   onClose,
 }) => {
   const categories = useWordCategories();
-  const [filterOptions, setFilterOptions] = useState<WordFilterOptions>({
-    query: "",
-    category: "",
-  });
+  const [options, setOptions] = useState<WordFilterFormData>(value);
 
+  const handleSearch = () => {
+    onSearch?.(options);
+  };
+
+  const handleClear = () => {
+    onSearch?.({ query: "", category: "" });
+  };
+
+  const handleChange = (
+    event: React.ChangeEvent<
+      HTMLInputElement | { name?: string | undefined; value: unknown }
+    >
+  ) => {
+    const { name, value } = event.target;
+    if (name && value) {
+      setOptions((state) => ({ ...state, [name]: value as string }));
+    }
+  };
   return (
     <StyledWordFilterDrawer
       open={open}
@@ -52,7 +71,13 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
           </IconButton>
         </Grid>
         <Grid item xs={12} className="mb-5">
-          <TextField variant="outlined" label="Search" fullWidth />
+          <TextField
+            variant="outlined"
+            label="Search"
+            fullWidth
+            name="query"
+            onChange={handleChange}
+          />
         </Grid>
         <Grid item xs={12} className="mb-5">
           <FormControl variant="outlined" fullWidth>
@@ -61,6 +86,8 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
               labelId="category-label"
               placeholder="Category"
               label="Category"
+              name="category"
+              onChange={handleChange}
             >
               {categories.map((category) => (
                 <MenuItem value={category.name}>{category.name}</MenuItem>
@@ -69,8 +96,24 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
           </FormControl>
         </Grid>
         <Grid item xs={12} className="flex items-center">
-          <Button variant="contained" color="primary" disableElevation size="large">
+          <Button
+            variant="contained"
+            color="primary"
+            disableElevation
+            size="large"
+            onClick={handleSearch}
+          >
             Search
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            disableElevation
+            size="large"
+            onClick={handleClear}
+            className="ml-3"
+          >
+            clear
           </Button>
         </Grid>
       </Grid>

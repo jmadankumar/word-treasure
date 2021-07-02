@@ -24,7 +24,7 @@ export interface WordCategory {
   name: string;
 }
 
-export interface WordFilterOptions {
+export interface WordFilterFormData {
   query: string;
   category: string;
 }
@@ -40,3 +40,12 @@ export interface WordFormData {
 }
 
 export type WordSortByKey = "alphabet" | "history";
+
+export type WordViewLayout = "list" | "grid";
+
+export interface WordFilterOptions {
+  sortBy: WordSortByKey;
+  page: number;
+  rowsPerPage: number;
+  formData: WordFilterFormData;
+}

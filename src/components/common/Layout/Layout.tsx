@@ -31,8 +31,8 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
   return (
     <StyledLayout id="page-container" className={className}>
       <Header />
-      <main className="main p-5 pt-2 md:p-8">
-        <div className="content">{children}</div>
+      <main className="main">
+        <div className="content p-5 pt-4 md:p-8">{children}</div>
       </main>
     </StyledLayout>
   );
