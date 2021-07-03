@@ -29,9 +29,9 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
   };
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed" elevation={0}>
       <Toolbar>
-        <Typography variant="h6" className="flex-grow">
+        <Typography variant="h6" className="flex-grow" component={Link} to="/">
           Word Treasure
         </Typography>
         {!user && (
@@ -39,7 +39,9 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
             Login
           </Button>
         )}
-        {user && <Avatar onClick={handleAvatarClick} className="cursor-pointer" />}
+        {user && (
+          <Avatar onClick={handleAvatarClick} className="cursor-pointer" />
+        )}
         <Popover
           anchorEl={anchorEl}
           keepMounted

@@ -5,15 +5,18 @@ import { AuthProvider } from "./context/AuthContext";
 import {
   ThemeProvider,
   createMuiTheme,
-  colors,
   StylesProvider,
+  colors,
 } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
 
+const { blue } = colors;
+
 const theme = createMuiTheme({
   palette: {
-    primary: {
-      main: colors.blue[500],
+    primary: blue,
+    secondary: {
+      main: "#c2185b",
     },
   },
 });

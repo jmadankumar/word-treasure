@@ -94,7 +94,13 @@ const Login = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Button color="primary" variant="contained" type="submit">
+              <Button
+                color="primary"
+                variant="contained"
+                type="submit"
+                size="large"
+                disableElevation
+              >
                 Login
               </Button>
             </FormGroup>

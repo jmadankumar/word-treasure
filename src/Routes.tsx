@@ -3,6 +3,7 @@ import { Switch, Route, RouteProps } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import WordPage from "./pages/WordPage";
 export interface CustomRouteProps extends RouteProps {
   isPrivate?: boolean;
   key: string;
@@ -14,6 +15,13 @@ const routes: CustomRouteProps[] = [
     component: Login,
     exact: true,
     key: "/login",
+  },
+  {
+    path: "/words",
+    component: WordPage,
+    exact: true,
+    key: "/words",
+    isPrivate: true,
   },
   {
     path: "/",
