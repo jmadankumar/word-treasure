@@ -18,7 +18,7 @@ const StyledWordFilterDrawer = styled(Drawer)`
   }
   .filter-form {
     width: 100%;
-    max-width: 600px;
+    max-width: 400px;
   }
 `;
 
