@@ -64,7 +64,7 @@ const Home: React.FunctionComponent = () => {
   const [openDeleteWordDialog, setOpenDeleteWordDialog] = useState(false);
   const [wordToEdit, setWordToEdit] = useState<Word | null>(null);
   const [wordToDelete, setWordToDelete] = useState<Word | null>(null);
-  const [viewLayout, setViewLayout] = useState<WordViewLayout>("grid");
+  const [viewLayout, setViewLayout] = useState<WordViewLayout>("list");
   const totalPage = calcTotalPage({ ...filterOptions, count: totalCount });
 
   const fetchWords = async () => {

@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Card,
   CardHeader,
   CardMedia,
@@ -33,7 +32,6 @@ const WordCard: React.FunctionComponent<WordCardProps> = ({
   return (
     <StyledWordCard>
       <CardHeader
-        avatar={<Avatar src={word.image_url}>{word.text[0]}</Avatar>}
         title={word.text}
         subheader={word.category}
       />
