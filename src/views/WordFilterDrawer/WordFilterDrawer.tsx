@@ -59,9 +59,9 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
   return (
     <StyledWordFilterDrawer
       open={open}
-      anchor="bottom"
+      anchor="right"
       onClose={onClose}
-      PaperProps={{ className: "paper p-8 flex items-center" }}
+      PaperProps={{ className: "paper p-3 flex items-center" }}
     >
       <Grid container spacing={2} justify="center" className="filter-form">
         <Grid item xs={12} className="flex items-center justify-between">
@@ -90,7 +90,9 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
               onChange={handleChange}
             >
               {categories.map((category) => (
-                <MenuItem value={category.name}>{category.name}</MenuItem>
+                <MenuItem value={category.name} key={category.id}>
+                  {category.name}
+                </MenuItem>
               ))}
             </Select>
           </FormControl>

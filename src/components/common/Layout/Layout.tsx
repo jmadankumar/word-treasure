@@ -32,7 +32,7 @@ const Layout: React.FunctionComponent<LayoutProps> = ({
     <StyledLayout id="page-container" className={className}>
       <Header />
       <main className="main">
-        <div className="content p-5 pt-4 md:p-8">{children}</div>
+        <div className="content p-3 pt-4 md:p-8">{children}</div>
       </main>
     </StyledLayout>
   );

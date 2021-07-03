@@ -17,6 +17,7 @@ const WordViewToggleButtonGroup: React.FunctionComponent<WordViewToggleButtonGro
         value={value}
         exclusive
         onChange={(event, value) => onChange?.(value)}
+        size="small"
       >
         <ToggleButton value="list">
           <ViewListIcon />

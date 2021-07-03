@@ -68,7 +68,6 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   useEffect(() => {
     const fetchSession = async () => {
       const session = await supabase.auth.session();
-      console.log(session);
       if (session) {
         setUser(session.user);
       }

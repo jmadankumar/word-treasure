@@ -46,7 +46,6 @@ const WordForm: React.FunctionComponent<WordFormProps> = ({
     onSave?.(wordFormdData);
   });
 
-  console.log("errors", errors);
   return (
     <form onSubmit={onSubmit}>
       <AppBar position="relative">
@@ -77,7 +76,9 @@ const WordForm: React.FunctionComponent<WordFormProps> = ({
                   {...field}
                 >
                   {categories.map((category) => (
-                    <MenuItem value={category.name}>{category.name}</MenuItem>
+                    <MenuItem value={category.name} key={category.id}>
+                      {category.name}
+                    </MenuItem>
                   ))}
                 </Select>
               </FormControl>

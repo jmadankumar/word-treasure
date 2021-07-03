@@ -5,11 +5,28 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useAuth } from "../../../context/AuthContext";
 import { Link } from "react-router-dom";
+import { Avatar, Popover } from "@material-ui/core";
+import { List, ListItem, ListItemText } from "@material-ui/core";
 
 export interface HeaderProps {}
 
 const Header: React.FunctionComponent<HeaderProps> = () => {
   const { user, logout } = useAuth();
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleAvatarClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
+  };
 
   return (
     <AppBar position="fixed">
@@ -22,11 +39,30 @@ const Header: React.FunctionComponent<HeaderProps> = () => {
             Login
           </Button>
         )}
-        {user && (
-          <Button color="inherit" onClick={logout}>
-            Logout
-          </Button>
-        )}
+        {user && <Avatar onClick={handleAvatarClick} className="cursor-pointer" />}
+        <Popover
+          anchorEl={anchorEl}
+          keepMounted
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+        >
+          <List disablePadding>
+            <ListItem divider>
+              <ListItemText primary={user?.email} />
+            </ListItem>
+            <ListItem button>
+              <ListItemText primary="Logout" onClick={handleLogout} />
+            </ListItem>
+          </List>
+        </Popover>
       </Toolbar>
     </AppBar>
   );

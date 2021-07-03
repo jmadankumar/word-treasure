@@ -46,15 +46,15 @@ const WordCard: React.FunctionComponent<WordCardProps> = ({
       )}
       <CardContent>
         <div className="mb-3">
-          <span className="font-semibold">English</span>
+          <span className="font-semibold">English -</span>
           <span className="ml-2">{word.translation.en}</span>
         </div>
         <div className="mb-3">
-          <span className="font-semibold"> Tamil</span>
+          <span className="font-semibold">Tamil -</span>
           <span className="ml-2">{word.translation.ta}</span>
         </div>
-        <div className="mb-3">
-          <span className="font-semibold"> Hindi</span>
+        <div className="">
+          <span className="font-semibold">Hindi -</span>
           <span className="ml-2">{word.translation.hi}</span>
         </div>
       </CardContent>

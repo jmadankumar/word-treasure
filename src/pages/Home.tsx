@@ -18,7 +18,7 @@ import WordFilterDialog from "../views/WordFilterDrawer";
 import PageTitle from "../components/common/PageTitle";
 import AddWordDialog from "../views/AddWordDialog";
 import EditWordDialog from "../views/EditWordDialog";
-import WordSortingTabs from "../components/WordSortingTabs";
+import WordSortingMenu from "../components/WordSortingMenu";
 import Pagination from "@material-ui/lab/Pagination";
 import { calcTotalPage, createPaginationRange } from "../helper/pagination";
 import WordList from "../components/WordList";
@@ -30,8 +30,8 @@ import DeleteDialog from "../components/common/DeleteDialog";
 const StyledHome = styled(Layout)`
   .add-btn {
     position: fixed;
-    right: 1rem;
-    bottom: 64px;
+    right: 16px;
+    bottom: 16px;
   }
 `;
 export interface AddButtonProps {
@@ -170,27 +170,27 @@ const Home: React.FunctionComponent = () => {
 
   return (
     <StyledHome>
-      <div className="flex justify-between">
+      <div className="flex justify-between mb-5">
         <PageTitle>Words</PageTitle>
-        <div>
-          <Button
-            color="primary"
-            variant="outlined"
-            onClick={() => setFilterOpen(true)}
-            startIcon={<FilterListIcon />}
-          >
-            Filter
-          </Button>
+        <div className="flex items-center">
+          <WordViewToggleButtonGroup
+            value={viewLayout}
+            onChange={setViewLayout}
+          />
         </div>
       </div>
-      <div className="flex justify-between items-center">
-        <WordSortingTabs
+      <div className="flex md:justify-end items-center mb-5 flex-wrap">
+        <Button
+          color="primary"
+          onClick={() => setFilterOpen(true)}
+          startIcon={<FilterListIcon />}
+          className="inline-flex"
+        >
+          Filter
+        </Button>
+        <WordSortingMenu
           sortBy={filterOptions.sortBy}
           onChange={handleSortingOrderChange}
-        />
-        <WordViewToggleButtonGroup
-          value={viewLayout}
-          onChange={setViewLayout}
         />
       </div>
       {viewLayout === "list" && (

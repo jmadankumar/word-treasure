@@ -9,8 +9,6 @@ import {
 } from "@material-ui/core";
 import React, { useState } from "react";
 import { Word } from "../../types/word";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 
@@ -27,7 +25,7 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ListItem divider={!open} key={word.id}>
+      <ListItem button divider={!open} key={word.id} onClick={() => setOpen(!open)}>
         <ListItemIcon onClick={() => setOpen((_open) => !_open)}>
           <Avatar src={word.image_url} className="capitalize">
             {word.text[0]}
@@ -40,8 +38,23 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
           secondaryTypographyProps={{ className: "capitalize" }}
         />
         <ListItemSecondaryAction>
-          <IconButton onClick={() => setOpen(!open)}>
-            {open ? <ExpandLess /> : <ExpandMore />}
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              onEdit?.(word);
+              setOpen(false);
+            }}
+          >
+            <Edit />
+          </IconButton>
+          <IconButton
+            onClick={(event) => {
+              event.stopPropagation();
+              onDelete?.(word);
+              setOpen(false);
+            }}
+          >
+            <Delete />
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
@@ -49,36 +62,18 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
         <ListItem divider={open}>
           <ListItemText>
             <div className="mb-3">
-              <span className="font-semibold">English</span>
+              <span className="font-semibold">English - </span>
               <span className="ml-2">{word.translation.en}</span>
             </div>
             <div className="mb-3">
-              <span className="font-semibold"> Tamil</span>
+              <span className="font-semibold">Tamil -</span>
               <span className="ml-2">{word.translation.ta}</span>
             </div>
             <div className="mb-3">
-              <span className="font-semibold"> Hindi</span>
+              <span className="font-semibold">Hindi -</span>
               <span className="ml-2">{word.translation.hi}</span>
             </div>
           </ListItemText>
-          <ListItemSecondaryAction>
-            <IconButton
-              onClick={() => {
-                onEdit?.(word);
-                setOpen(false);
-              }}
-            >
-              <Edit />
-            </IconButton>
-            <IconButton
-              onClick={() => {
-                onDelete?.(word);
-                setOpen(false);
-              }}
-            >
-              <Delete />
-            </IconButton>
-          </ListItemSecondaryAction>
         </ListItem>
       </Collapse>
     </>

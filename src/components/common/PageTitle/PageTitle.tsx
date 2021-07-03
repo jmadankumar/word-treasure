@@ -1,11 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import cn from "classnames";
 
 const StyledPageTitle = styled.h3``;
 
-const PageTitle: React.FunctionComponent = ({ children }) => {
+export interface PageTitleProps {
+  classNames?: string;
+}
+const PageTitle: React.FunctionComponent<PageTitleProps> = ({
+  children,
+  classNames,
+}) => {
   return (
-    <StyledPageTitle className="text-3xl font-bold capitalize mb-8">
+    <StyledPageTitle
+      className={cn("text-3xl font-bold capitalize", classNames)}
+    >
       {children}
     </StyledPageTitle>
   );
