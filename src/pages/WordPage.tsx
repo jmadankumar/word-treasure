@@ -16,6 +16,7 @@ import {
 } from "../types/word";
 import WordFilterDialog from "../views/WordFilterDrawer";
 import PageTitle from "../components/common/PageTitle";
+import Container from "../components/common/Container";
 import AddWordDialog from "../views/AddWordDialog";
 import EditWordDialog from "../views/EditWordDialog";
 import WordSortingMenu from "../components/WordSortingMenu";
@@ -40,7 +41,12 @@ export interface AddButtonProps {
 
 const AddButton: React.FunctionComponent<AddButtonProps> = ({ onClick }) => {
   return (
-    <Fab color="secondary" aria-label="add" className="add-btn" onClick={onClick}>
+    <Fab
+      color="secondary"
+      aria-label="add"
+      className="add-btn"
+      onClick={onClick}
+    >
       <AddIcon />
     </Fab>
   );
@@ -170,97 +176,99 @@ const WordPage: React.FunctionComponent = () => {
 
   return (
     <StyledWordPage>
-      <div className="flex justify-between mb-5">
-        <PageTitle>Words</PageTitle>
-        <div className="flex items-center">
-          <WordViewToggleButtonGroup
-            value={viewLayout}
-            onChange={setViewLayout}
+      <Container>
+        <div className="flex justify-between mb-5">
+          <PageTitle>Words</PageTitle>
+          <div className="flex items-center">
+            <WordViewToggleButtonGroup
+              value={viewLayout}
+              onChange={setViewLayout}
+            />
+          </div>
+        </div>
+        <div className="flex md:justify-end items-center mb-5 flex-wrap">
+          <Button
+            color="primary"
+            onClick={() => setFilterOpen(true)}
+            startIcon={<FilterListIcon />}
+            className="inline-flex"
+          >
+            Filter
+          </Button>
+          <WordSortingMenu
+            sortBy={filterOptions.sortBy}
+            onChange={handleSortingOrderChange}
           />
         </div>
-      </div>
-      <div className="flex md:justify-end items-center mb-5 flex-wrap">
-        <Button
-          color="primary"
-          onClick={() => setFilterOpen(true)}
-          startIcon={<FilterListIcon />}
-          className="inline-flex"
-        >
-          Filter
-        </Button>
-        <WordSortingMenu
-          sortBy={filterOptions.sortBy}
-          onChange={handleSortingOrderChange}
-        />
-      </div>
-      {viewLayout === "list" && (
-        <Paper className="mb-5">
-          <WordList
+        {viewLayout === "list" && (
+          <Paper className="mb-5">
+            <WordList
+              words={words}
+              onEdit={handleEditSelection}
+              onDelete={handleDeleteSelection}
+            />
+          </Paper>
+        )}
+        {viewLayout === "grid" && (
+          <WordGrid
             words={words}
             onEdit={handleEditSelection}
             onDelete={handleDeleteSelection}
+            className="mb-5"
           />
-        </Paper>
-      )}
-      {viewLayout === "grid" && (
-        <WordGrid
-          words={words}
-          onEdit={handleEditSelection}
-          onDelete={handleDeleteSelection}
-          className="mb-5"
-        />
-      )}
-      {totalPage > 0 && (
-        <Paper>
-          <div className="flex justify-center p-3">
-            <Pagination
-              count={totalPage}
-              variant="outlined"
-              shape="rounded"
-              page={filterOptions.page}
-              onChange={handlePageChange}
-            />
+        )}
+        {totalPage > 0 && (
+          <Paper>
+            <div className="flex justify-center p-3">
+              <Pagination
+                count={totalPage}
+                variant="outlined"
+                shape="rounded"
+                page={filterOptions.page}
+                onChange={handlePageChange}
+              />
+            </div>
+          </Paper>
+        )}
+        {totalPage === 0 && (
+          <div className="flex justify-center p-16 bg-gray-200">
+            No words. Please add new words and expand your confidents.
           </div>
-        </Paper>
-      )}
-      {totalPage === 0 && (
-        <div className="flex justify-center p-16 bg-gray-200">
-          No words. Please add new words and expand your confidents.
-        </div>
-      )}
+        )}
 
-      <AddButton onClick={() => setOpenAddWordDialog(true)} />
-      <WordFilterDialog
-        open={filterOpen}
-        onClose={() => setFilterOpen(false)}
-        value={filterOptions.formData}
-        onSearch={handleSearch}
-      />
-      {openAddWordDialog && (
-        <AddWordDialog
-          open={openAddWordDialog}
-          onClose={() => setOpenAddWordDialog(false)}
-          onSave={handleSave}
+        <AddButton onClick={() => setOpenAddWordDialog(true)} />
+        <WordFilterDialog
+          open={filterOpen}
+          onClose={() => setFilterOpen(false)}
+          value={filterOptions.formData}
+          onSearch={handleSearch}
         />
-      )}
-      {openEditWordDialog && wordToEdit && (
-        <EditWordDialog
-          word={wordToEdit}
-          open={openEditWordDialog}
-          onClose={() => setOpenEditWordDialog(false)}
-          onSave={handleUpdate}
-        />
-      )}
-      {openDeleteWordDialog && wordToDelete && (
-        <DeleteDialog
-          open={openDeleteWordDialog}
-          title="Delete Word"
-          description={`Are you sure? you want to delete the word "${wordToDelete.text}".`}
-          value={wordToDelete}
-          onCancel={handleDeleteCancel}
-          onDelete={handleDelete}
-        />
-      )}
+        {openAddWordDialog && (
+          <AddWordDialog
+            open={openAddWordDialog}
+            onClose={() => setOpenAddWordDialog(false)}
+            onSave={handleSave}
+          />
+        )}
+        {openEditWordDialog && wordToEdit && (
+          <EditWordDialog
+            word={wordToEdit}
+            open={openEditWordDialog}
+            onClose={() => setOpenEditWordDialog(false)}
+            onSave={handleUpdate}
+          />
+        )}
+        {openDeleteWordDialog && wordToDelete && (
+          <DeleteDialog
+            open={openDeleteWordDialog}
+            title="Delete Word"
+            description={`Are you sure? you want to delete the word "${wordToDelete.text}".`}
+            value={wordToDelete}
+            onCancel={handleDeleteCancel}
+            onDelete={handleDelete}
+          />
+        )}
+      </Container>
     </StyledWordPage>
   );
 };
