@@ -9,6 +9,7 @@ import {
   colors,
 } from "@material-ui/core";
 import { BrowserRouter } from "react-router-dom";
+import {WordPreferenceProvider} from './context/WordsPreferenceContext';
 
 const { blue } = colors;
 
@@ -28,7 +29,9 @@ function App() {
         <AuthProvider>
           <ThemeProvider theme={theme}>
             <StylesProvider injectFirst>
-              <Routes />
+              <WordPreferenceProvider>
+                <Routes />
+              </WordPreferenceProvider>
             </StylesProvider>
           </ThemeProvider>
         </AuthProvider>

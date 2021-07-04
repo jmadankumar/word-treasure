@@ -12,7 +12,6 @@ import {
   WordFilterFormData,
   WordFilterOptions,
   WordSortByKey,
-  WordViewLayout,
 } from "../types/word";
 import WordFilterDialog from "../views/WordFilterDrawer";
 import PageTitle from "../components/common/PageTitle";
@@ -27,6 +26,7 @@ import WordGrid from "../components/WordGrid";
 import WordViewToggleButtonGroup from "../components/WordViewToggleButtonGroup";
 import toast from "react-hot-toast";
 import DeleteDialog from "../components/common/DeleteDialog";
+import { useWordPreference } from "../context/WordsPreferenceContext";
 
 const StyledWordPage = styled(Layout)`
   .add-btn {
@@ -55,8 +55,9 @@ const AddButton: React.FunctionComponent<AddButtonProps> = ({ onClick }) => {
 const WordPage: React.FunctionComponent = () => {
   const [words, setWords] = useState<Word[]>([]);
   const [totalCount, setTotalCount] = useState(0);
+  const { sortBy, setSortBy, layout, setLayout } = useWordPreference();
   const [filterOptions, setFilterOptions] = useState<WordFilterOptions>({
-    sortBy: "history",
+    sortBy: sortBy,
     page: 1,
     rowsPerPage: 20,
     formData: {
@@ -70,7 +71,6 @@ const WordPage: React.FunctionComponent = () => {
   const [openDeleteWordDialog, setOpenDeleteWordDialog] = useState(false);
   const [wordToEdit, setWordToEdit] = useState<Word | null>(null);
   const [wordToDelete, setWordToDelete] = useState<Word | null>(null);
-  const [viewLayout, setViewLayout] = useState<WordViewLayout>("list");
   const totalPage = calcTotalPage({ ...filterOptions, count: totalCount });
 
   const fetchWords = async () => {
@@ -88,7 +88,7 @@ const WordPage: React.FunctionComponent = () => {
     if (filterOptions.sortBy === "alphabet") {
       query.order("text", { ascending: true });
     } else if (filterOptions.sortBy === "history") {
-      query.order("updated_time", { ascending: false });
+      query.order("created_time", { ascending: false });
     }
 
     if (filterOptions.formData.category) {
@@ -171,6 +171,7 @@ const WordPage: React.FunctionComponent = () => {
   };
 
   const handleSortingOrderChange = (sortBy: WordSortByKey) => {
+    setSortBy(sortBy);
     setFilterOptions((state) => ({ ...state, sortBy, page: 1 }));
   };
 
@@ -180,10 +181,7 @@ const WordPage: React.FunctionComponent = () => {
         <div className="flex justify-between mb-5">
           <PageTitle>Words</PageTitle>
           <div className="flex items-center">
-            <WordViewToggleButtonGroup
-              value={viewLayout}
-              onChange={setViewLayout}
-            />
+            <WordViewToggleButtonGroup value={layout} onChange={setLayout} />
           </div>
         </div>
         <div className="flex md:justify-end items-center mb-5 flex-wrap">
@@ -200,7 +198,7 @@ const WordPage: React.FunctionComponent = () => {
             onChange={handleSortingOrderChange}
           />
         </div>
-        {viewLayout === "list" && (
+        {layout === "list" && (
           <Paper className="mb-5">
             <WordList
               words={words}
@@ -209,7 +207,7 @@ const WordPage: React.FunctionComponent = () => {
             />
           </Paper>
         )}
-        {viewLayout === "grid" && (
+        {layout === "grid" && (
           <WordGrid
             words={words}
             onEdit={handleEditSelection}
