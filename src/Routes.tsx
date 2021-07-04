@@ -3,6 +3,7 @@ import { Switch, Route, RouteProps } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import FlashCard from "./pages/tests/FlashCard";
 import WordPage from "./pages/WordPage";
 export interface CustomRouteProps extends RouteProps {
   isPrivate?: boolean;
@@ -21,6 +22,13 @@ const routes: CustomRouteProps[] = [
     component: WordPage,
     exact: true,
     key: "/words",
+    isPrivate: true,
+  },
+  {
+    path: "/tests/flash-cards",
+    component: FlashCard,
+    exact: true,
+    key: "/tests/flash-card",
     isPrivate: true,
   },
   {
