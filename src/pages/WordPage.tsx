@@ -1,4 +1,4 @@
-import { Fab, Button, Paper } from "@material-ui/core";
+import { Fab, Button, Paper, Chip } from "@material-ui/core";
 import React from "react";
 import styled from "styled-components";
 import Layout from "../components/common/Layout";
@@ -72,6 +72,9 @@ const WordPage: React.FunctionComponent = () => {
   const [wordToEdit, setWordToEdit] = useState<Word | null>(null);
   const [wordToDelete, setWordToDelete] = useState<Word | null>(null);
   const totalPage = calcTotalPage({ ...filterOptions, count: totalCount });
+  const isFilterDataAvailable = Object.values(filterOptions.formData).some(
+    (val) => !!val
+  );
 
   const fetchWords = async () => {
     const range = createPaginationRange({
@@ -175,6 +178,22 @@ const WordPage: React.FunctionComponent = () => {
     setFilterOptions((state) => ({ ...state, sortBy, page: 1 }));
   };
 
+  const clearFilterFormData = (name?: string) => {
+    if (name) {
+      setFilterOptions((options) => ({
+        ...options,
+        formData: { ...options.formData, [name]: "" },
+        page: 1,
+      }));
+    } else {
+      setFilterOptions((options) => ({
+        ...options,
+        formData: { query: "", category: "" },
+        page: 1,
+      }));
+    }
+  };
+
   return (
     <StyledWordPage>
       <Container>
@@ -184,19 +203,51 @@ const WordPage: React.FunctionComponent = () => {
             <WordViewToggleButtonGroup value={layout} onChange={setLayout} />
           </div>
         </div>
-        <div className="flex md:justify-end items-center mb-5 flex-wrap">
-          <Button
-            color="primary"
-            onClick={() => setFilterOpen(true)}
-            startIcon={<FilterListIcon />}
-            className="inline-flex"
-          >
-            Filter
-          </Button>
-          <WordSortingMenu
-            sortBy={filterOptions.sortBy}
-            onChange={handleSortingOrderChange}
-          />
+        <div className="flex lg:justify-between items-center mb-5 flex-wrap">
+          <div className="w-full lg:w-1/2 flex order-last lg:order-first mt-4 lg:mt-0">
+            {filterOptions.formData.query && (
+              <div className="mr-4">
+                <span className="font-medium mr-1">Query:</span>
+                <Chip
+                  label={filterOptions.formData.query}
+                  onDelete={() => clearFilterFormData("query")}
+                />
+              </div>
+            )}
+            {filterOptions.formData.category && (
+              <div className="mr-4">
+                <span className="font-medium mr-1">Category:</span>
+                <Chip
+                  label={filterOptions.formData.category}
+                  onDelete={() => clearFilterFormData("category")}
+                />
+              </div>
+            )}
+            {isFilterDataAvailable && (
+              <Button
+                color="secondary"
+                onClick={() => clearFilterFormData()}
+                startIcon={<FilterListIcon />}
+                className="inline-flex ml-2"
+              >
+                Clear All
+              </Button>
+            )}
+          </div>
+          <div className="w-full lg:w-1/2 flex flex-wrap lg:justify-end">
+            <Button
+              color="primary"
+              onClick={() => setFilterOpen(true)}
+              startIcon={<FilterListIcon />}
+              className="inline-flex"
+            >
+              Filter
+            </Button>
+            <WordSortingMenu
+              sortBy={filterOptions.sortBy}
+              onChange={handleSortingOrderChange}
+            />
+          </div>
         </div>
         {layout === "list" && (
           <Paper className="mb-5">
@@ -235,12 +286,14 @@ const WordPage: React.FunctionComponent = () => {
         )}
 
         <AddButton onClick={() => setOpenAddWordDialog(true)} />
-        <WordFilterDialog
-          open={filterOpen}
-          onClose={() => setFilterOpen(false)}
-          value={filterOptions.formData}
-          onSearch={handleSearch}
-        />
+        {filterOptions.formData && filterOpen && (
+          <WordFilterDialog
+            open={filterOpen}
+            onClose={() => setFilterOpen(false)}
+            value={filterOptions.formData}
+            onSearch={handleSearch}
+          />
+        )}
         {openAddWordDialog && (
           <AddWordDialog
             open={openAddWordDialog}
