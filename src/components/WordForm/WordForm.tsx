@@ -87,6 +87,22 @@ const WordForm: React.FunctionComponent<WordFormProps> = ({
         </FormGroup>
         <FormGroup className="mb-5">
           <Controller
+            name="topic"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="text"
+                variant="outlined"
+                label="Topic"
+                error={!!errors.topic}
+                helperText={errors.topic?.message}
+              />
+            )}
+          />
+        </FormGroup>
+        <FormGroup className="mb-5">
+          <Controller
             name="text"
             control={control}
             render={({ field }) => (
@@ -103,6 +119,22 @@ const WordForm: React.FunctionComponent<WordFormProps> = ({
         </FormGroup>
         <FormGroup className="mb-5">
           <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                id="text"
+                variant="outlined"
+                label="Description"
+                error={!!errors.description}
+                helperText={errors.description?.message}
+              />
+            )}
+          />
+        </FormGroup>
+        <FormGroup className="mb-8">
+          <Controller
             name="image_url"
             control={control}
             render={({ field }) => (
@@ -118,20 +150,7 @@ const WordForm: React.FunctionComponent<WordFormProps> = ({
           />
         </FormGroup>
         <FormGroup className="mb-5">
-          <Controller
-            name="translation.en"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                id="text"
-                variant="outlined"
-                label="English"
-                error={!!errors.translation?.en}
-                helperText={errors.translation?.en?.message}
-              />
-            )}
-          />
+          <div className="text-lg font-bold">Translation</div>
         </FormGroup>
         <FormGroup className="mb-5">
           <Controller

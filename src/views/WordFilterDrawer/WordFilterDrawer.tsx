@@ -77,6 +77,7 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
             fullWidth
             name="query"
             onChange={handleChange}
+            value={options.query}
           />
         </Grid>
         <Grid item xs={12} className="mb-5">
@@ -88,6 +89,7 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
               label="Category"
               name="category"
               onChange={handleChange}
+              value={options.category}
             >
               {categories.map((category) => (
                 <MenuItem value={category.name} key={category.id}>

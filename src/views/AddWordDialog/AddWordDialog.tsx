@@ -29,8 +29,9 @@ const AddWordDialog: React.FunctionComponent<AddWordDialogProps> = ({
   const [wordFormData] = useState<WordFormData>({
     text: "",
     category: "",
+    topic: "",
+    description: "",
     translation: {
-      en: "",
       ta: "",
       hi: "",
     },

@@ -11,6 +11,8 @@ import { Word } from "../../types";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
 import styled from "styled-components";
+import { formatSubheading } from "../../helper/word";
+import WordContent from "../WordContent";
 
 const StyledWordCard = styled(Card)`
   .card-media {
@@ -31,10 +33,7 @@ const WordCard: React.FunctionComponent<WordCardProps> = ({
 }) => {
   return (
     <StyledWordCard>
-      <CardHeader
-        title={word.text}
-        subheader={word.category}
-      />
+      <CardHeader title={word.text} subheader={formatSubheading(word)} />
       {word.image_url && (
         <CardMedia
           image={word.image_url}
@@ -43,18 +42,7 @@ const WordCard: React.FunctionComponent<WordCardProps> = ({
         />
       )}
       <CardContent>
-        <div className="mb-3">
-          <span className="font-semibold">English -</span>
-          <span className="ml-2">{word.translation.en}</span>
-        </div>
-        <div className="mb-3">
-          <span className="font-semibold">Tamil -</span>
-          <span className="ml-2">{word.translation.ta}</span>
-        </div>
-        <div className="">
-          <span className="font-semibold">Hindi -</span>
-          <span className="ml-2">{word.translation.hi}</span>
-        </div>
+        <WordContent word={word} />
       </CardContent>
       <CardActions>
         <IconButton

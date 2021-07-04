@@ -11,6 +11,8 @@ import React, { useState } from "react";
 import { Word } from "../../types/word";
 import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
+import { formatSubheading } from "../../helper/word";
+import WordContent from "../WordContent";
 
 export interface WordItemProps {
   word: Word;
@@ -25,7 +27,12 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ListItem button divider={!open} key={word.id} onClick={() => setOpen(!open)}>
+      <ListItem
+        button
+        divider={!open}
+        key={word.id}
+        onClick={() => setOpen(!open)}
+      >
         <ListItemIcon onClick={() => setOpen((_open) => !_open)}>
           <Avatar src={word.image_url} className="capitalize">
             {word.text[0]}
@@ -33,7 +40,7 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
         </ListItemIcon>
         <ListItemText
           primary={word.text}
-          secondary={word.category}
+          secondary={formatSubheading(word)}
           primaryTypographyProps={{ className: "capitalize" }}
           secondaryTypographyProps={{ className: "capitalize" }}
         />
@@ -61,18 +68,7 @@ const WordItem: React.FunctionComponent<WordItemProps> = ({
       <Collapse in={open} timeout="auto" unmountOnExit>
         <ListItem divider={open}>
           <ListItemText>
-            <div className="mb-3">
-              <span className="font-semibold">English - </span>
-              <span className="ml-2">{word.translation.en}</span>
-            </div>
-            <div className="mb-3">
-              <span className="font-semibold">Tamil -</span>
-              <span className="ml-2">{word.translation.ta}</span>
-            </div>
-            <div className="mb-3">
-              <span className="font-semibold">Hindi -</span>
-              <span className="ml-2">{word.translation.hi}</span>
-            </div>
+            <WordContent word={word} />
           </ListItemText>
         </ListItem>
       </Collapse>

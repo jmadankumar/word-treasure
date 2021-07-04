@@ -1,5 +1,8 @@
 import Joi from "joi";
 
+export const ALLOW_EMPTY = "";
+export const ALLOW_NULL = null;
+
 export const email = Joi.string()
   .email({
     tlds: { allow: false },
