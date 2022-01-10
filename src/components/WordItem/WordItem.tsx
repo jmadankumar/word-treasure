@@ -1,77 +1,66 @@
 import {
   ListItem,
   ListItemText,
-  ListItemIcon,
-  Collapse,
-  Avatar,
   ListItemSecondaryAction,
   IconButton,
+  Tooltip,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { Word } from "../../types/word";
-import Delete from "@material-ui/icons/Delete";
 import Edit from "@material-ui/icons/Edit";
-import { formatSubheading } from "../../helper/word";
-import WordContent from "../WordContent";
-
+import VolumeUpIcon from "@material-ui/icons/VolumeUp";
+import MicIcon from "@material-ui/icons/Mic";
+import { pronounceWord } from "../../helper/pronounce";
 export interface WordItemProps {
   word: Word;
   onEdit?: (word: Word) => void;
-  onDelete?: (word: Word) => void;
+  onPractice?: (word: Word) => void;
 }
 const WordItem: React.FunctionComponent<WordItemProps> = ({
   word,
   onEdit,
-  onDelete,
+  onPractice,
 }) => {
-  const [open, setOpen] = useState(false);
   return (
     <>
-      <ListItem
-        button
-        divider={!open}
-        key={word.id}
-        onClick={() => setOpen(!open)}
-      >
-        <ListItemIcon onClick={() => setOpen((_open) => !_open)}>
-          <Avatar src={word.image_url} className="capitalize">
-            {word.text[0]}
-          </Avatar>
-        </ListItemIcon>
+      <ListItem divider key={word.id}>
         <ListItemText
           primary={word.text}
-          secondary={formatSubheading(word)}
           primaryTypographyProps={{ className: "capitalize" }}
-          secondaryTypographyProps={{ className: "capitalize" }}
         />
         <ListItemSecondaryAction>
-          <IconButton
-            onClick={(event) => {
-              event.stopPropagation();
-              onEdit?.(word);
-              setOpen(false);
-            }}
-          >
-            <Edit />
-          </IconButton>
-          <IconButton
-            onClick={(event) => {
-              event.stopPropagation();
-              onDelete?.(word);
-              setOpen(false);
-            }}
-          >
-            <Delete />
-          </IconButton>
+          <Tooltip title="Practice">
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                onPractice?.(word);
+              }}
+            >
+              <MicIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Pronounce">
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                pronounceWord(word.text);
+              }}
+            >
+              <VolumeUpIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Edit">
+            <IconButton
+              onClick={(event) => {
+                event.stopPropagation();
+                onEdit?.(word);
+              }}
+            >
+              <Edit />
+            </IconButton>
+          </Tooltip>
         </ListItemSecondaryAction>
       </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <ListItem divider={open}>
-          <ListItemText>
-            <WordContent word={word} />
-          </ListItemText>
-        </ListItem>
-      </Collapse>
     </>
   );
 };

@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
 import { WordFilterFormData } from "../../types";
 import { Drawer, IconButton, Typography } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import styled from "styled-components";
-import useWordCategories from "../../hooks/useWordCategories";
 
 const StyledWordFilterDrawer = styled(Drawer)`
   .paper {
@@ -35,7 +30,6 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
   onSearch,
   onClose,
 }) => {
-  const categories = useWordCategories();
   const [options, setOptions] = useState<WordFilterFormData>(value);
 
   const handleSearch = () => {
@@ -43,7 +37,7 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
   };
 
   const handleClear = () => {
-    onSearch?.({ query: "", category: "" });
+    onSearch?.({ query: "" });
   };
 
   const handleChange = (
@@ -80,25 +74,7 @@ const WordFilterDrawer: React.FunctionComponent<WordFilterDrawerProps> = ({
             value={options.query}
           />
         </Grid>
-        <Grid item xs={12} className="mb-5">
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              placeholder="Category"
-              label="Category"
-              name="category"
-              onChange={handleChange}
-              value={options.category}
-            >
-              {categories.map((category) => (
-                <MenuItem value={category.name} key={category.id}>
-                  {category.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+        
         <Grid item xs={12} className="flex items-center">
           <Button
             variant="contained"

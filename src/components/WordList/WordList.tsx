@@ -6,15 +6,15 @@ import WordItem from "../WordItem";
 export interface WordListProps {
   words: Word[];
   onEdit?: (word: Word) => void;
-  onDelete?: (word: Word) => void;
+  onPractice?: (word: Word) => void;
   className?: string;
 }
 
 const WordList: React.FunctionComponent<WordListProps> = ({
   words,
   onEdit,
-  onDelete,
   className,
+  onPractice,
 }) => {
   if (words.length === 0) {
     return null;
@@ -25,8 +25,8 @@ const WordList: React.FunctionComponent<WordListProps> = ({
         <WordItem
           word={word}
           onEdit={onEdit}
-          onDelete={onDelete}
           key={word.id}
+          onPractice={onPractice}
         />
       ))}
     </List>

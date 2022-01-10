@@ -30,11 +30,21 @@ const EditWordDialog: React.FunctionComponent<EditWordDialogProps> = ({
 }) => {
   const [wordFormData] = useState<WordFormData>({
     ...word,
-    tags: word.tags ?? [],
   });
 
   const handleSave = async (formData: WordFormData) => {
     delete formData.id;
+
+    const { data: wordData } = await supabase
+      .from<Word>("words")
+      .select("*")
+      .eq("text", formData.text);
+
+    if (wordData && wordData.length > 0 && wordData[0].id !== wordFormData.id) {
+      toast.error("Word Exist");
+      return;
+    }
+
     const { data, error } = await supabase
       .from<Word>("words")
       .update({ ...formData, updated_time: new Date() })

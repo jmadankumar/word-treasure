@@ -67,7 +67,7 @@ const Login = () => {
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    id="password"
+                    id="email"
                     variant="outlined"
                     label="Email"
                     error={!!errors.email}

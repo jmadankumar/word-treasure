@@ -28,29 +28,29 @@ const AddWordDialog: React.FunctionComponent<AddWordDialogProps> = ({
 }) => {
   const [wordFormData] = useState<WordFormData>({
     text: "",
-    category: "",
-    topic: "",
-    description: "",
-    translation: {
-      ta: "",
-      hi: "",
-    },
-    image_url: "",
-    deleted: false,
-    tags: [],
+    revise: false,
   });
 
-  const handleSave = async (wordFormdData: WordFormData) => {
-    const { data, error } = await supabase
+  const handleSave = async (newWordFormData: WordFormData) => {
+    const { data: wordData } = await supabase
       .from<Word>("words")
-      .insert([wordFormdData]);
-    if (data) {
-      toast.success("New Word added");
-      onSave?.();
-    }
+      .select("*")
+      .eq("text", newWordFormData.text);
 
-    if (error) {
-      toast.error(error.message);
+    if (wordData?.length === 0) {
+      const { data, error } = await supabase
+        .from<Word>("words")
+        .insert([newWordFormData]);
+      if (data) {
+        toast.success("New Word added");
+        onSave?.();
+      }
+
+      if (error) {
+        toast.error(error.message);
+      }
+    } else {
+      toast.error("Word Exist");
     }
   };
 

@@ -22,11 +22,8 @@ import WordSortingMenu from "../components/WordSortingMenu";
 import Pagination from "@material-ui/lab/Pagination";
 import { calcTotalPage, createPaginationRange } from "../helper/pagination";
 import WordList from "../components/WordList";
-import WordGrid from "../components/WordGrid";
-import WordViewToggleButtonGroup from "../components/WordViewToggleButtonGroup";
-import toast from "react-hot-toast";
-import DeleteDialog from "../components/common/DeleteDialog";
 import { useWordPreference } from "../context/WordsPreferenceContext";
+import { useWordPractise } from "../context/WordPractiseContext";
 
 const StyledWordPage = styled(Layout)`
   .add-btn {
@@ -55,26 +52,24 @@ const AddButton: React.FunctionComponent<AddButtonProps> = ({ onClick }) => {
 const WordPage: React.FunctionComponent = () => {
   const [words, setWords] = useState<Word[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const { sortBy, setSortBy, layout, setLayout } = useWordPreference();
+  const { sortBy, setSortBy } = useWordPreference();
   const [filterOptions, setFilterOptions] = useState<WordFilterOptions>({
     sortBy: sortBy,
     page: 1,
     rowsPerPage: 20,
     formData: {
       query: "",
-      category: "",
     },
   });
   const [filterOpen, setFilterOpen] = useState(false);
   const [openAddWordDialog, setOpenAddWordDialog] = useState(false);
   const [openEditWordDialog, setOpenEditWordDialog] = useState(false);
-  const [openDeleteWordDialog, setOpenDeleteWordDialog] = useState(false);
   const [wordToEdit, setWordToEdit] = useState<Word | null>(null);
-  const [wordToDelete, setWordToDelete] = useState<Word | null>(null);
   const totalPage = calcTotalPage({ ...filterOptions, count: totalCount });
   const isFilterDataAvailable = Object.values(filterOptions.formData).some(
     (val) => !!val
   );
+  const { show } = useWordPractise();
 
   const fetchWords = async () => {
     const range = createPaginationRange({
@@ -85,17 +80,12 @@ const WordPage: React.FunctionComponent = () => {
     const query = supabase
       .from<Word>("words")
       .select("*", { count: "exact" })
-      .eq("deleted", false)
       .range(range.from, range.to);
 
     if (filterOptions.sortBy === "alphabet") {
       query.order("text", { ascending: true });
     } else if (filterOptions.sortBy === "history") {
       query.order("created_time", { ascending: false });
-    }
-
-    if (filterOptions.formData.category) {
-      query.eq("category", filterOptions.formData.category);
     }
 
     if (filterOptions.formData.query) {
@@ -128,33 +118,6 @@ const WordPage: React.FunctionComponent = () => {
   const handleUpdate = () => {
     fetchWords();
     setOpenEditWordDialog(false);
-  };
-
-  const handleDeleteSelection = (word: Word) => {
-    setWordToDelete(word);
-    setOpenDeleteWordDialog(true);
-  };
-
-  const handleDelete = async (word: Word) => {
-    const { data, error } = await supabase
-      .from<Word>("words")
-      .update({ deleted: true })
-      .eq("id", word.id);
-    if (error) {
-      toast.error(error.message);
-    }
-    if (data) {
-      setWordToDelete(null);
-      setOpenDeleteWordDialog(false);
-
-      toast.success(`Word "${word.text}" deleted`);
-      fetchWords();
-    }
-  };
-
-  const handleDeleteCancel = () => {
-    setWordToDelete(null);
-    setOpenDeleteWordDialog(false);
   };
 
   const handlePageChange = (
@@ -197,11 +160,8 @@ const WordPage: React.FunctionComponent = () => {
   return (
     <StyledWordPage>
       <Container>
-        <div className="flex justify-between mb-5">
+        <div className="flex mb-5">
           <PageTitle>Words</PageTitle>
-          <div className="flex items-center">
-            <WordViewToggleButtonGroup value={layout} onChange={setLayout} />
-          </div>
         </div>
         <div className="flex lg:justify-between items-center mb-5 flex-wrap">
           <div className="w-full lg:w-1/2 flex order-last lg:order-first mt-4 lg:mt-0">
@@ -214,15 +174,7 @@ const WordPage: React.FunctionComponent = () => {
                 />
               </div>
             )}
-            {filterOptions.formData.category && (
-              <div className="mr-4">
-                <span className="font-medium mr-1">Category:</span>
-                <Chip
-                  label={filterOptions.formData.category}
-                  onDelete={() => clearFilterFormData("category")}
-                />
-              </div>
-            )}
+
             {isFilterDataAvailable && (
               <Button
                 color="secondary"
@@ -249,23 +201,15 @@ const WordPage: React.FunctionComponent = () => {
             />
           </div>
         </div>
-        {layout === "list" && (
-          <Paper className="mb-5">
-            <WordList
-              words={words}
-              onEdit={handleEditSelection}
-              onDelete={handleDeleteSelection}
-            />
-          </Paper>
-        )}
-        {layout === "grid" && (
-          <WordGrid
+
+        <Paper className="mb-5">
+          <WordList
             words={words}
             onEdit={handleEditSelection}
-            onDelete={handleDeleteSelection}
-            className="mb-5"
+            onPractice={(word) => show(word.text)}
           />
-        )}
+        </Paper>
+
         {totalPage > 0 && (
           <Paper>
             <div className="flex justify-center p-3">
@@ -307,16 +251,6 @@ const WordPage: React.FunctionComponent = () => {
             open={openEditWordDialog}
             onClose={() => setOpenEditWordDialog(false)}
             onSave={handleUpdate}
-          />
-        )}
-        {openDeleteWordDialog && wordToDelete && (
-          <DeleteDialog
-            open={openDeleteWordDialog}
-            title="Delete Word"
-            description={`Are you sure? you want to delete the word "${wordToDelete.text}".`}
-            value={wordToDelete}
-            onCancel={handleDeleteCancel}
-            onDelete={handleDelete}
           />
         )}
       </Container>

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/common/Layout";
-import { Card, CardContent, Grid, Link } from "@material-ui/core";
+import { Card, CardContent, Fab, Grid, Link } from "@material-ui/core";
 import supabase from "../lib/supabase-client";
 import { Word } from "../types";
 import { Link as RouterLink } from "react-router-dom";
 import CropOriginalIcon from "@material-ui/icons/CropOriginal";
 import BorderColorIcon from "@material-ui/icons/BorderColor";
 import AssignmentTurnedInIcon from "@material-ui/icons/AssignmentTurnedIn";
-import TranslateIcon from '@material-ui/icons/Translate';
+import TranslateIcon from "@material-ui/icons/Translate";
+import Mic from "@material-ui/icons/Mic";
+import { useWordPractise } from "../context/WordPractiseContext";
 export interface HomeCardProps {
   title: string;
   content: any;
@@ -36,6 +38,7 @@ const HomeCard: React.FunctionComponent<HomeCardProps> = ({
 };
 const Home = () => {
   const [totalWords, setTotalWords] = useState(0);
+  const { show } = useWordPractise();
 
   useEffect(() => {
     const fetchWordCount = async () => {
@@ -92,6 +95,14 @@ const Home = () => {
           />
         </Grid>
       </Grid>
+      <Fab
+        color="secondary"
+        aria-label="add"
+        className="fixed bottom-5 right-5"
+        onClick={() => show("")}
+      >
+        <Mic />
+      </Fab>
     </Layout>
   );
 };
